@@ -6,7 +6,7 @@
 ### Intro ###
 
 # Lo scopo di questo progetto è quello di fare un'analisi del
-# territorio cremonese usabdo le immagini Landsat.
+# territorio cremonese usando le immagini Landsat.
 # Il dataset è composto dalle immagini con path 193 e row 29
 #relative all'arco temporale che va dal 1972 al 2020.
 
