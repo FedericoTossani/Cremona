@@ -37,8 +37,8 @@ require(ggplot2)
 require(gridExtra)
 require(viridis)
 require(purrr)
-setwd("C:\Federico_T\Dati_Landsat")
-# source("/Users/federicotossani/Asinara/spectralrao.r")
+setwd("C:/Federico_T/Dati_Landsat")
+# source("C:/Federico_T/Dati_Landsat/spectralrao.r")
 
 #######################################################
 ## 2. Images
@@ -50,28 +50,31 @@ setwd("C:\Federico_T\Dati_Landsat")
 
 #p84 <- plotRGB(p84t, 3, 2, 1, stretch="lin")
 #drawExtent(show=TRUE, col="red")
-#class      : Extent 
-#xmin       : 431858.1 
-#xmax       : 445713 
-#ymin       : 4532960 
-#ymax       : 4552802 
+# class      : Extent 
+# xmin       : 571391.8 
+# xmax       : 585388.2 
+# ymin       : 4990448 
+# ymax       : 5005740 
 
 ### estensione ###
-extnew<-extent(431858.1, 445713, 4532960, 4552802)
+extnew<-extent(571391.8, 585388.2, 4990448, 5005740)
 
 # Import immagini CR Landsat 1
 
 list72<-list.files(pattern="_72")
 p72t<-lapply(list72, brick)
-p72 <- plotRGB(p72t, 3, 2, 1, stretch="lin")
-#p72<- map(p72t, crop, extnew)
+#p72c<- map(p72t, crop, extnew)
+p72<-stack(p72c)
+p72 <- plotRGB(p72s, 3, 2, 1, stretch="lin")
+
 writeRaster(p72, filename="CR_p208r29_1972.grd", format="raster")
 
 # Import immagini CR Landsat 2
 
 list75<-list.files(pattern="_75")
 p75t<-lapply(list75, brick)
-p72<- map(p75t, crop, extnew)
+p75s<-stack(p75t)
+p75<- map(p75s, crop, extnew)
 writeRaster(p75, filename="CR_p208r29_1975.grd", format="raster")
 
 list79<-list.files(pattern="_79")
