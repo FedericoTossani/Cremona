@@ -57,7 +57,19 @@ setwd("C:/Federico_T/Dati_Landsat")
 # ymax       : 5005740 
 
 ### estensione ###
+
+# x immagini p208 r29
 extnew<-extent(571391.8, 585388.2, 4990448, 5005740)
+
+# x immagini p193 r29
+
+# drawExtent(show=TRUE, col="red")
+# class      : Extent 
+# xmin       : 568731.3 
+# xmax       : 590042.3 
+# ymin       : 4988492 
+# ymax       : 5007671 
+extnew<-extent(568731.3, 590042.3, 4988492, 5007671)
 
 # Import immagini CR Landsat 1
 
@@ -73,13 +85,14 @@ writeRaster(p72, filename="CR_p208r29_1972.grd", format="raster")
 
 list75<-list.files(pattern="_75")
 p75t<-lapply(list75, brick)
-p75s<-stack(p75t)
-p75<- map(p75s, crop, extnew)
+p75c<- map(p75t, crop, extnew)
+p75<-stack(p75c)
 writeRaster(p75, filename="CR_p208r29_1975.grd", format="raster")
 
 list79<-list.files(pattern="_79")
 p79t<-lapply(list79, brick)
-p79<- map(p79t, crop, extnew)
+p79c<- map(p79t, crop, extnew)
+p79<-stack(p79c)
 writeRaster(p79, filename="CR_p208r29_1979.grd", format="raster")
 
 # Import immagini CR Landsat 4
