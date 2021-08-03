@@ -310,8 +310,13 @@ cl <- colorRampPalette(c("dark red","red","orange","yellow","white")) (100)
 
 # timeseries_CR[[15]]$L5_03_B6, col=cl
 
+#######################################################
+## 4. Restituzione grafica
 
-
+ggplot()+
+geom_raster(temp_s$L5_84_B6, mapping=aes(x = x, y = y, fill = layer))+
+scale_fill_viridis()+
+ggtitle("Cremona 1984")
 
 
 
