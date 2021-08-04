@@ -318,9 +318,231 @@ geom_raster(temp_s$L5_84_B6, mapping=aes(x = x, y = y, fill = layer))+
 scale_fill_viridis()+
 ggtitle("Cremona 1984")
 
+#######################################################
+
+## Vegetation indices
+
+# 1984
+raslist <- paste0('C:/Federico_T/Dati_Landsat/L5_84_B', 1:7, ".TIF")
+landsat_s <- stack(raslist)
+extnew<-extent(568731.3, 590042.3, 4988492, 5007671)
+landsat84 <- crop(landsat_s, extnew)
+landsat84RGB <- landsat84[[c(3,2,1)]]
+landsat84FCC <- landsat84[[c(4,3,2)]]
+
+# 1987
+raslist <- paste0('C:/Federico_T/Dati_Landsat/L5_87_B', 1:7, ".TIF")
+landsat_s <- stack(raslist)
+extnew<-extent(568731.3, 590042.3, 4988492, 5007671)
+landsat87 <- crop(landsat_s, extnew)
+landsat87RGB <- landsat87[[c(3,2,1)]]
+landsat87FCC <- landsat87[[c(4,3,2)]]
+
+# 1990
+raslist <- paste0('C:/Federico_T/Dati_Landsat/L5_90_B', 1:7, ".TIF")
+landsat_s <- stack(raslist)
+extnew<-extent(568731.3, 590042.3, 4988492, 5007671)
+landsat90 <- crop(landsat_s, extnew)
+landsat90RGB <- landsat90[[c(3,2,1)]]
+landsat90FCC <- landsat90[[c(4,3,2)]]
+
+# 1993
+raslist <- paste0('C:/Federico_T/Dati_Landsat/L5_93_B', 1:7, ".TIF")
+landsat_s <- stack(raslist)
+extnew<-extent(568731.3, 590042.3, 4988492, 5007671)
+landsat93 <- crop(landsat_s, extnew)
+landsat93RGB <- landsat93[[c(3,2,1)]]
+landsat93FCC <- landsat93[[c(4,3,2)]]
+
+# 1997
+raslist <- paste0('C:/Federico_T/Dati_Landsat/L5_97_B', 1:7, ".TIF")
+landsat_s <- stack(raslist)
+extnew<-extent(568731.3, 590042.3, 4988492, 5007671)
+landsat97 <- crop(landsat_s, extnew)
+landsat97RGB <- landsat97[[c(3,2,1)]]
+landsat97FCC <- landsat97[[c(4,3,2)]]
+
+# 2001
+raslist <- paste0('C:/Federico_T/Dati_Landsat/L5_01_B', 1:7, ".TIF")
+landsat_s <- stack(raslist)
+extnew<-extent(568731.3, 590042.3, 4988492, 5007671)
+landsat01 <- crop(landsat_s, extnew)
+landsat01RGB <- landsat01[[c(3,2,1)]]
+landsat01FCC <- landsat01[[c(4,3,2)]]
+
+# 2004
+raslist <- paste0('C:/Federico_T/Dati_Landsat/L5_04_B', 1:7, ".TIF")
+landsat_s <- stack(raslist)
+extnew<-extent(568731.3, 590042.3, 4988492, 5007671)
+landsat04 <- crop(landsat_s, extnew)
+landsat04RGB <- landsat04[[c(3,2,1)]]
+landsat04FCC <- landsat04[[c(4,3,2)]]
+
+# 2007
+raslist <- paste0('C:/Federico_T/Dati_Landsat/L5_07_B', 1:7, ".TIF")
+landsat_s <- stack(raslist)
+extnew<-extent(568731.3, 590042.3, 4988492, 5007671)
+landsat07 <- crop(landsat_s, extnew)
+landsat07RGB <- landsat07[[c(3,2,1)]]
+landsat07FCC <- landsat07[[c(4,3,2)]]
+
+#2011
+raslist <- paste0('C:/Federico_T/Dati_Landsat/L5_11_B', 1:7, ".TIF")
+landsat_s <- stack(raslist)
+extnew<-extent(568731.3, 590042.3, 4988492, 5007671)
+landsat11 <- crop(landsat_s, extnew)
+landsat11RGB <- landsat11[[c(3,2,1)]]
+landsat11FCC <- landsat11[[c(4,3,2)]]
+
+#2019
+raslist <- paste0('C:/Federico_T/Dati_Landsat/L8_19_B', 1:7, ".TIF")
+landsat_s <- stack(raslist)
+extnew<-extent(568731.3, 590042.3, 4988492, 5007671)
+landsat19 <- crop(landsat_s, extnew)
+landsat19RGB <- landsat19[[c(3,2,1)]]
+landsat19FCC <- landsat19[[c(4,3,2)]]
+
+#2020
+raslist <- paste0('C:/Federico_T/Dati_Landsat/L8_20_B', 1:7, ".TIF")
+landsat_s <- stack(raslist)
+extnew<-extent(568731.3, 590042.3, 4988492, 5007671)
+landsat20 <- crop(landsat_s, extnew)
+landsat20RGB <- landsat20[[c(3,2,1)]]
+landsat20FCC <- landsat20[[c(4,3,2)]]
+
+# Let's create a function to calculate NDVI
+
+vi <- function(img, k, i) {
+  bk <- img[[k]]
+  bi <- img[[i]]
+  vi <- (bk - bi) / (bk + bi)
+  return(vi)
+}
+
+# For Landsat5 data NIR = 4, red = 3.
+
+# 1984
+ndvi84 <- vi(landsat84, 4, 3)
+p1<-ggplot()+
+geom_raster(ndvi84, mapping=aes(x = x, y = y, fill = layer))+
+scale_fill_viridis()+
+ggtitle("Cremona 1984 NDVI")
+
+# 1987
+ndvi87 <- vi(landsat87, 4, 3)
+p2<-ggplot()+
+geom_raster(ndvi87, mapping=aes(x = x, y = y, fill = layer))+
+scale_fill_viridis()+
+ggtitle("Cremona 1987 NDVI")
+
+# 1990
+ndvi90 <- vi(landsat90, 4, 3)
+p3<-ggplot()+
+geom_raster(ndvi90, mapping=aes(x = x, y = y, fill = layer))+
+scale_fill_viridis()+
+ggtitle("Cremona 1990 NDVI")
+
+# 1993
+ndvi93 <- vi(landsat93, 4, 3)
+p4<-ggplot()+
+geom_raster(ndvi93, mapping=aes(x = x, y = y, fill = layer))+
+scale_fill_viridis()+
+ggtitle("Cremona 1993 NDVI")
+
+# 1997
+ndvi97 <- vi(landsat97, 4, 3)
+p5<-ggplot()+
+geom_raster(ndvi97, mapping=aes(x = x, y = y, fill = layer))+
+scale_fill_viridis()+
+ggtitle("Cremona 1997 NDVI")
+
+# 2001
+ndvi01 <- vi(landsat01, 4, 3)
+p6<-ggplot()+
+geom_raster(ndvi01, mapping=aes(x = x, y = y, fill = layer))+
+scale_fill_viridis()+
+ggtitle("Cremona 2001 NDVI")
+
+# 2004
+ndvi04 <- vi(landsat04, 4, 3)
+p7<-ggplot()+
+geom_raster(ndvi04, mapping=aes(x = x, y = y, fill = layer))+
+scale_fill_viridis()+
+ggtitle("Cremona 2004 NDVI")
+
+# 2007
+ndvi07 <- vi(landsat07, 4, 3)
+p8<-ggplot()+
+geom_raster(ndvi07, mapping=aes(x = x, y = y, fill = layer))+
+scale_fill_viridis()+
+ggtitle("Cremona 2007 NDVI")
+
+# 2011
+ndvi11 <- vi(landsat11, 4, 3)
+p9<-ggplot()+
+geom_raster(ndvi11, mapping=aes(x = x, y = y, fill = layer))+
+scale_fill_viridis()+
+ggtitle("Cremona 2011 NDVI")
+
+# 2019
+ndvi19 <- vi(landsat19, 4, 3)
+p3<-plot(ndvi19, col = rev(terrain.colors(10)), main = "Cremona 2019 NDVI")
+
+# 2020
+ndvi20 <- vi(landsat20, 4, 3)
+p2<-plot(ndvi20, col = rev(terrain.colors(10)), main = "Cremona 2020 NDVI")
+
+# Confronto
+par(mfrow=c(1,2))
+plot(ndvi84, col = rev(terrain.colors(10)), main = "Cremona 1984 NDVI")
+plot(ndvi11, col = rev(terrain.colors(10)), main = "Cremona 2011 NDVI")
+
+par(mfrow=c(1,2))
+plot(landsat84FCC, col = rev(terrain.colors(10)), main = "Cremona 1984")
+plot(landsat20FCC, col = rev(terrain.colors(10)), main = "Cremona 2020")
+
+pdf("Cremona_NDVI.pdf")
+grid.arrange(p1, p2, p3, p4, p5, p6, p7, p8, p9, nrow=5, ncol=2)
+dev.off()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+names(timeseries_CR) <- c("timeseries_CR[[1]]", "timeseries_CR[[23]]")
+# The class names and colors for plotting
+classname <- c("Water", "Developed", "Barren", "Forest", "Shrubland", "Herbaceous", "Planted/Cultivated", "Wetlands")
+classdf <- data.frame(classvalue1 = c(1,2,3,4,5,7,8,9), classnames1 = classname)
+# Hex codes of colors
+classcolor <- c("#5475A8", "#B50000", "#D2CDC0", "#38814E", "#AF963C", "#D1D182", "#FBF65D", "#C8E6F8")
+# Now we ratify (RAT = "Raster Attribute Table") the timeseries_CR[[23]] (define RasterLayer as a categorical variable). This is helpful for plotting.
+cr2020 <- timeseries_CR[[2]]
+cr2020 <- ratify(cr2020)
+rat <- levels(cr2020)[[1]]
+#
+rat$landcover <- classname
+levels(cr2020) <- rat
+
+
+
+
+
+
+cr_class<-unsuperClass(timeseries_CR[[23]], nClasses=5)
 
 
 
