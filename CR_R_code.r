@@ -37,6 +37,7 @@ require(ggplot2)
 require(gridExtra)
 require(viridis)
 require(purrr)
+require(OpenLand)
 setwd("C:/Federico_T/Dati_Landsat")
 # source("C:/Federico_T/Dati_Landsat/spectralrao.r")
 
@@ -327,6 +328,7 @@ raslist <- paste0('C:/Federico_T/Dati_Landsat/L5_84_B', 1:7, ".TIF")
 landsat_s <- stack(raslist)
 extnew<-extent(568731.3, 590042.3, 4988492, 5007671)
 landsat84 <- crop(landsat_s, extnew)
+writeRaster(landsat84, filename="cremona_1984.grd", format="raster")
 landsat84RGB <- landsat84[[c(3,2,1)]]
 landsat84FCC <- landsat84[[c(4,3,2)]]
 
@@ -335,6 +337,7 @@ raslist <- paste0('C:/Federico_T/Dati_Landsat/L5_87_B', 1:7, ".TIF")
 landsat_s <- stack(raslist)
 extnew<-extent(568731.3, 590042.3, 4988492, 5007671)
 landsat87 <- crop(landsat_s, extnew)
+writeRaster(landsat87, filename="cremona_1987.grd", format="raster")
 landsat87RGB <- landsat87[[c(3,2,1)]]
 landsat87FCC <- landsat87[[c(4,3,2)]]
 
@@ -343,6 +346,7 @@ raslist <- paste0('C:/Federico_T/Dati_Landsat/L5_90_B', 1:7, ".TIF")
 landsat_s <- stack(raslist)
 extnew<-extent(568731.3, 590042.3, 4988492, 5007671)
 landsat90 <- crop(landsat_s, extnew)
+writeRaster(landsat90, filename="cremona_1990.grd", format="raster")
 landsat90RGB <- landsat90[[c(3,2,1)]]
 landsat90FCC <- landsat90[[c(4,3,2)]]
 
@@ -351,6 +355,7 @@ raslist <- paste0('C:/Federico_T/Dati_Landsat/L5_93_B', 1:7, ".TIF")
 landsat_s <- stack(raslist)
 extnew<-extent(568731.3, 590042.3, 4988492, 5007671)
 landsat93 <- crop(landsat_s, extnew)
+writeRaster(landsat93, filename="cremona_1993.grd", format="raster")
 landsat93RGB <- landsat93[[c(3,2,1)]]
 landsat93FCC <- landsat93[[c(4,3,2)]]
 
@@ -359,6 +364,7 @@ raslist <- paste0('C:/Federico_T/Dati_Landsat/L5_97_B', 1:7, ".TIF")
 landsat_s <- stack(raslist)
 extnew<-extent(568731.3, 590042.3, 4988492, 5007671)
 landsat97 <- crop(landsat_s, extnew)
+writeRaster(landsat97, filename="cremona_1997.grd", format="raster")
 landsat97RGB <- landsat97[[c(3,2,1)]]
 landsat97FCC <- landsat97[[c(4,3,2)]]
 
@@ -367,6 +373,7 @@ raslist <- paste0('C:/Federico_T/Dati_Landsat/L5_01_B', 1:7, ".TIF")
 landsat_s <- stack(raslist)
 extnew<-extent(568731.3, 590042.3, 4988492, 5007671)
 landsat01 <- crop(landsat_s, extnew)
+writeRaster(landsat01, filename="cremona_2001.grd", format="raster")
 landsat01RGB <- landsat01[[c(3,2,1)]]
 landsat01FCC <- landsat01[[c(4,3,2)]]
 
@@ -375,6 +382,7 @@ raslist <- paste0('C:/Federico_T/Dati_Landsat/L5_04_B', 1:7, ".TIF")
 landsat_s <- stack(raslist)
 extnew<-extent(568731.3, 590042.3, 4988492, 5007671)
 landsat04 <- crop(landsat_s, extnew)
+writeRaster(landsat04, filename="cremona_2004.grd", format="raster")
 landsat04RGB <- landsat04[[c(3,2,1)]]
 landsat04FCC <- landsat04[[c(4,3,2)]]
 
@@ -383,6 +391,7 @@ raslist <- paste0('C:/Federico_T/Dati_Landsat/L5_07_B', 1:7, ".TIF")
 landsat_s <- stack(raslist)
 extnew<-extent(568731.3, 590042.3, 4988492, 5007671)
 landsat07 <- crop(landsat_s, extnew)
+writeRaster(landsat07, filename="cremona_2007.grd", format="raster")
 landsat07RGB <- landsat07[[c(3,2,1)]]
 landsat07FCC <- landsat07[[c(4,3,2)]]
 
@@ -391,6 +400,7 @@ raslist <- paste0('C:/Federico_T/Dati_Landsat/L5_11_B', 1:7, ".TIF")
 landsat_s <- stack(raslist)
 extnew<-extent(568731.3, 590042.3, 4988492, 5007671)
 landsat11 <- crop(landsat_s, extnew)
+writeRaster(landsat11, filename="cremona_2011.grd", format="raster")
 landsat11RGB <- landsat11[[c(3,2,1)]]
 landsat11FCC <- landsat11[[c(4,3,2)]]
 
@@ -505,10 +515,29 @@ pdf("Cremona_NDVI.pdf")
 grid.arrange(p1, p2, p3, p4, p5, p6, p7, p8, p9, nrow=5, ncol=2)
 dev.off()
 
+####################################################
+
+## Land Cover Timeseries
+
+cremona<-list.files(pattern="cremona_")
+
+SL_1984_2011 <- contingencyTable(input_raster = cremona, pixelresolution = 30)
 
 
 
+## Extract pixels values
 
+# load the polygons with land use land cover information
+samp <- readRDS('data/rs/samples.rds')
+# generate 300 point samples from the polygons
+ptsamp <- spsample(samp, 300, type='regular')
+## Warning in proj4string(obj): CRS object has comment, which is lost in output
+# add the land cover class to the points
+ptsamp$class <- over(ptsamp, samp)$class
+# extract values with points
+df <- extract(landsat, ptsamp)
+# To see some of the reflectance values
+head(df)
 
 
 
