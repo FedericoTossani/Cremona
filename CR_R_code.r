@@ -431,6 +431,8 @@ vi <- function(img, k, i) {
 
 # For Landsat5 data NIR = 4, red = 3.
 
+cremona<-list.files(pattern="cremona_")
+
 # 1984
 ndvi84 <- vi(landsat84, 4, 3)
 p1<-ggplot()+
@@ -515,7 +517,30 @@ pdf("Cremona_NDVI.pdf")
 grid.arrange(p1, p2, p3, p4, p5, p6, p7, p8, p9, nrow=5, ncol=2)
 dev.off()
 
+# soglia della vegetazione
+# tutti i pixel con valori di NDVI maggiore o uguale a 0.4 indicano vegetazione
+
+veg84 <- reclassify(ndvi84, cbind(-Inf, 0.4, NA))
+plot(veg, main='Vegetation')
+
+
+# view histogram of data
+
+# 1984
+hist(ndvi84,
+     main = "Distribution of 1984 NDVI values",
+     xlab = "NDVI",
+     ylab= "Frequency",
+     col = "wheat",
+     xlim = c(-0.5, 1),
+     breaks = 30,
+     xaxt = 'n')
+axis(side=1, at = seq(-0.5,1, 0.05), labels = seq(-0.5,1, 0.05))
+
 ####################################################
+
+
+
 
 ## Land Cover Timeseries
 
