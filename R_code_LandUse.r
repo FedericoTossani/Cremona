@@ -121,22 +121,53 @@ landsat11 <- crop(landsat_s, extnew)
 ### CORREGGERE
 
 
-landsat84<-raster(landsat84)
-landsat11<-raster(landsat11)
+landsat84<-brick("CR_p193r29_1984.grd")
+landsat11<-brick("CR_p193r29_2011.grd")
 cr8411<-stack(landsat84, landsat11)
-names(cr8411) <- c("landsat84", "landsat11")
+#writeRaster(cr8411, filename="cremona8411.tif", format="raster")
+cremona<-brick("cremona8411.grd")
+
+landsat84<-brick("CR_p193r29_1984.grd")
+landsat11<-brick("CR_p193r29_2011.grd")
+cr8411<-stack(landsat84, landsat11)
+writeRaster(cr8411, filename="cremona.tif", format="GTiff")
+cremona<-brick("cremona.tif")
+
+cr84<-c(cremona$cremona.1, cremona$cremona.2, cremona$cremona.3, cremona$cremona.4, cremona$cremona.5, cremona$cremona.6, cremona$cremona.7)
+cr11<-c(cremona$cremona.8, cremona$cremona.9, cremona$cremona.10, cremona$cremona.11, cremona$cremona.12, cremona$cremona.13, cremona$cremona.14)
+
+nlcd01<-raster("nlcd_2001_land_cover_l48_20210604.img")
+nlcd11<-raster("nlcd_2011_land_cover_l48_20210604.img")
+
 # The class names and colors for plotting
-crclass <- c("Water", "Developed", "Barren", "Forest", "Shrubland", "Herbaceous", "Planted/Cultivated", "Wetlands")
-classdf <- data.frame(classvalue1 = c(1,2,3,4,5,7,8,9), classnames1 = crclass)
+nlcdclass <- c("Water", "Developed", "Barren", "Forest", "Shrubland", "Herbaceous", "Planted/Cultivated", "Wetlands")
+classdf <- data.frame(classvalue1 = c(1,2,3,4,5,7,8,9), classnames1 = nlcdclass)
 # Hex codes of colors
 classcolor <- c("#5475A8", "#B50000", "#D2CDC0", "#38814E", "#AF963C", "#D1D182", "#FBF65D", "#C8E6F8")
 # Now we ratify (RAT = "Raster Attribute Table") the ncld2011 (define RasterLayer as a categorical variable). This is helpful for plotting.
-landsat11 <- cr8411[[2]]
-landsat11 <- ratify(landsat11)
-rat <- levels(landsat11)[[1]]
+nlcd11 <- ratify(nlcd11)
+rat <- levels(nlcd11)[[1]]
 #
-rat$landcover <- crclass
-levels(landsat11) <- rat
+rat$landcover <- nlcdclass
+levels(nlcd11) <- rat
+
+# Load the training sites locations
+# Set the random number generator to reproduce the results
+set.seed(99)
+# Sampling
+samp2011 <- sampleStratified(nlcd11, size = 200, na.rm = TRUE, sp = TRUE)
+samp2011
+
+# Number of samples in each class
+table(samp2011$nlcd11)
+##
+##   1   2   3   4   5   7   8   9
+## 200 200 200 200 200 200 200 200
+
+
+
+
+
 
 
 
